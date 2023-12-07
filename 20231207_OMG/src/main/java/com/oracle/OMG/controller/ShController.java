@@ -1,0 +1,12 @@
+package com.oracle.OMG.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class ShController {
+	@RequestMapping(value = "/")
+	public String main() {
+		return "main";
+	}
+}
