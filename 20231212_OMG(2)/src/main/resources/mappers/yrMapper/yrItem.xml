@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.OMG.YrItem">
+	<select id="itemList" resultType="Item">
+		SELECT i.*, c.com_cn
+		FROM item i, comm c
+		where i.cate_lg = c.ct_lg
+		and i.cate_md = c.ct_md
+		ORDER BY i.code
+	</select>
+	
+	<select id="selectItem" parameterType="int" resultType="Item">
+		SELECT i.*, c.com_cn
+		FROM item i, comm c
+		where i.cate_lg = c.ct_lg
+		and i.cate_md = c.ct_md
+		and i.code = #{code}
+	</select>
+</mapper>
