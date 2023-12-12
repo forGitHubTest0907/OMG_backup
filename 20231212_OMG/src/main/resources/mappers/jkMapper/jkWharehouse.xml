@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.oracle.OMG.mappers.jkWarehouse">
+
+	
+<select id="monthDataList" resultType="Warehouse" parameterType="map">
+    SELECT *
+    FROM Warehouse
+    WHERE YM = #{month, jdbcType=VARCHAR}
+    AND (
+        (#{invType, jdbcType=VARCHAR} = 'ALL' AND (INVEN = 0 OR INVEN = 1))
+        OR (#{invType, jdbcType=VARCHAR} = 'OPENING' AND INVEN = 0)
+        OR (#{invType, jdbcType=VARCHAR} = 'CLOSING' AND INVEN = 1)
+    )
+</select>
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

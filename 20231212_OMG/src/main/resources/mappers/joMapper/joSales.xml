@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.oracle.OMG.mappers.joSales">
+	<select id="joListSalesInquiry" parameterType="SalesDetail" resultType="SalesDetail">
+		SELECT s.*, sd.*, TO_CHAR(sd.qty * sd.price, 'L999,999,999') AS total_price,
+        		        (SELECT company FROM customer c WHERE c.custcode = s.custcode) AS company_name,
+                		(SELECT name    FROM item i WHERE i.code = sd.code) AS item_name
+        FROM   sales s, sales_detail sd
+		WHERE  s.sales_date = sd.sales_date
+	</select>
+	
+	
+</mapper>
