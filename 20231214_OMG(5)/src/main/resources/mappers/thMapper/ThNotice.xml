@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oracle.OMG.ThNoticeMapper">
+	
+	<select id="getTotNotice" resultType="int">
+		SELECT 	COUNT(*) 
+		FROM 	board
+		WHERE	brd_md=100
+		AND		brd_step=0
+	</select>
+	
+	<select id="getNoticeList" parameterType="Board" resultType="Board">
+		SELECT b.*, (
+	                    SELECT  mem_name
+	                    FROM    member m
+	                    WHERE   m.mem_id = b.mem_id
+                    ) AS mem_name
+		FROM 
+			(
+				SELECT rownum rn, a.*
+				FROM
+					(
+						SELECT 		* 
+					 	FROM 		board
+					 	WHERE		brd_md   = 100
+					 	AND			brd_step = 0 
+					 	ORDER BY 	brd_id DESC) a
+			) b
+		WHERE rn BETWEEN #{start} AND #{end}
+	</select>
+	
+	<insert id="insertNotice" parameterType="Board">
+		INSERT INTO board(brd_id		,   mem_id , brd_lg, brd_md,   title ,   brd_cn ,   view_cnt , reg_date, brd_group         , brd_step)
+			   VALUES(brd_id_seq.nextval, #{mem_id}, 700   , 100   , #{title}, #{brd_cn}, #{view_cnt}, SYSDATE , brd_id_seq.nextval,    0    )
+	</insert>
+	
+	<insert id="insertSelectKeyNotice" parameterType="Board">
+		<selectKey keyProperty="brd_id" order="BEFORE" resultType="int">
+			SELECT brd_id_seq.nextval FROM dual
+		</selectKey>		
+		INSERT INTO board( brd_id,    mem_id , brd_lg, brd_md,   title ,   brd_cn ,   view_cnt , reg_date, brd_group, brd_step)
+			   VALUES(   #{brd_id}, #{mem_id}, 700   , 100   , #{title}, #{brd_cn}, #{view_cnt}, SYSDATE , #{brd_id},    0    )
+	</insert>
+	
+	<select id="readNotice" parameterType="int" resultType="Board">
+		SELECT 	b.*, (
+	                    SELECT  mem_name
+	                    FROM    member m
+	                    WHERE   m.mem_id = b.mem_id
+                   	 ) AS mem_name
+		FROM	board b
+		WHERE	b.brd_id = ${brd_id}
+	</select>
+	
+	<delete id="deleteNotice" parameterType="int">
+		DELETE
+		FROM	board
+		WHERE	brd_id = #{brd_id}
+	</delete>
+	
+	<update id="updateNotice" parameterType="Board">
+		UPDATE	board
+		SET		title    = #{title},
+				brd_cn   = #{brd_cn},
+				mod_date = #{mod_date},
+		WHERE	brd_id   = #{brd_id}		
+	</update>
+	
+	
+</mapper>

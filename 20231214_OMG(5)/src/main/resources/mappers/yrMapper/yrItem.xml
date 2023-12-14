@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.OMG.YrItem">
+	<select id="yrItemList" resultType="Item">
+		SELECT i.*, c.com_cn
+		FROM item i, comm c
+		where i.cate_lg = c.ct_lg
+		and i.cate_md = c.ct_md
+		ORDER BY i.code
+	</select>
+	
+	<select id="yrSelectItem" parameterType="int" resultType="Item">
+		SELECT  cm.com_cn, cs.company, to_char(i.reg_date,'yyyy-MM-dd') AS reg_date,
+		        i.code, i.custcode, i.cate_md, i.name, i.item_cn, i.input_price, i.output_price, i.deleted
+		FROM item i, comm cm, customer cs
+		where i.code = #{code}
+		and i.custcode = cs.custcode
+		and i.cate_lg = cm.ct_lg
+		and i.cate_md = cm.ct_md
+	</select>
+</mapper>
