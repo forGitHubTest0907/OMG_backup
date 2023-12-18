@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oracle.OMG.dto.Member">
+	
+	<select id="bkLogin" parameterType="Member" resultType="Member">
+		Select  *
+		From    member
+		WHERE   mem_id  = #{mem_id}
+		And     mem_pw  = #{mem_pw}
+	</select>
+	
+	
+	
+	<select id="bkcheckNameAndTel" parameterType="Member" resultType="Member">
+		Select  *
+		From    member
+		WHERE   mem_name  = #{mem_name}
+	</select>
+	
+</mapper>

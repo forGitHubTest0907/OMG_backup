@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.oracle.OMG.mappers.joSales">
+	<select id="joListSalesInquiry" parameterType="SalesDetail" resultType="SalesDetail">
+		SELECT s.*, sd.*, TO_CHAR(sd.qty * sd.price, 'L999,999,999') AS total_price,
+        		        (SELECT company FROM customer c WHERE c.custcode = s.custcode) AS company_name,
+                		(SELECT name    FROM item i WHERE i.code = sd.code) AS item_name
+        FROM   sales s, sales_detail sd
+		WHERE  s.sales_date = sd.sales_date
+	</select>
+	
+	
+	<select id="joGetTotalSalesInquiry" resultType="int">
+		SELECT count(*) 
+        FROM   sales s
+	</select>
+	
+	
+	<select id="joSearchSalesInquiry" parameterType="SalesDetail" resultType="SalesDetail">
+		SELECT sd.*, s.title, s.sales_status, c.company, i.name, TO_CHAR(sd.qty * sd.price, 'L999,999,999') AS total_price
+		FROM   sales_detail sd, sales s, customer c, item i
+		WHERE  sd.custcode = c.custcode
+		AND    sd.custcode = i.custcode
+		AND    sd.sales_date = s.sales_date
+		<choose>
+			<when test="search == 's_company'">
+				AND c.company like '%' || #{keyword} || '%'
+			</when>
+			<when test="search == 's_item'">
+				AND i.name like '%' || #{keyword} || '%'
+			</when>
+			<otherwise>
+				AND c.company like '%'
+			</otherwise>		
+		</choose>
+	</select>
+	
+	
+	<select id="joGetSearchTotalSalesInquiry" resultType="int">
+		SELECT count(*)
+		FROM   sales_detail sd, sales s, customer c, item i
+		WHERE  sd.custcode = c.custcode
+		AND    sd.custcode = i.custcode
+		AND    sd.sales_date = s.sales_date
+		<choose>
+			<when test="search == 's_company'">
+				AND c.company like '%' || #{keyword} || '%'
+			</when>
+			<when test="search == 's_item'">
+				AND i.name like '%' || #{keyword} || '%'
+			</when>
+			<otherwise>
+				AND c.company like '%'
+			</otherwise>		
+		</choose>
+	 </select>
+	
+	
+	 <select id="joGetSortTotalSalesInquiry" resultType="int">
+		SELECT count(*)
+		FROM   sales_detail sd, sales s, customer c, item i
+		WHERE  sd.custcode = c.custcode
+		AND    sd.custcode = i.custcode
+		AND    sd.sales_date = s.sales_date
+		AND    sd.sales_status = #{sales_status}
+	  </select>
+	
+		
+	<select id="joSortSalesInquiry" parameterType="int" resultType="SalesDetail">
+		SELECT sd.*, s.title, s.sales_status, c.company, i.name, TO_CHAR(sd.qty * sd.price, 'L999,999,999') AS total_price
+		FROM   sales_detail sd, sales s, customer c, item i
+		WHERE  sd.custcode = c.custcode
+		AND    sd.custcode = i.custcode
+		AND    sd.sales_date = s.sales_date
+		AND    s.sales_status = #{sales_status}
+	</select>
+		
+	
+</mapper>
