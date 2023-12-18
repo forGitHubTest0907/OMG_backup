@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.OMG.shMember">
+	<select id="shCreateMember" parameterType="Member" resultType="int">
+		Insert Into Member(mem_id, mem_right, mem_name, mem_img, mem_email, mem_hiredate, mem_bd, mem_sex, mem_phone, mem_dept_lg, mem_dept_md, mem_posi_lg, mem_posi_md, mem_duty_lg, mem_duty_md, mem_mailcode, mem_address, mem_pw)
+		values (member_id_seq.nextval,#{mem_right}, #{mem_name}, #{mem_img}, #{mem_email}, #{mem_hiredate}, #{mem_bd}, #{mem_sex}, #{mem_phone}, #{mem_dept_lg}, #{mem_dept_md},#{mem_posi_lg},#{mem_posi_md},#{mem_duty_lg}, #{mem_duty_md}, #{mem_mailcode}, #{mem_pw});
+	</select>
+	
+	<select id="shMemberList" parameterType="Member" resultType="Member">
+		Select a.*
+		From 
+			(Select rownum rn, mem_hiredate, mem_id, mem_name, mem_dept_md, mem_posi_md, mem_email, mem_leave, mem_rein, mem_resi
+			From member)a
+		Where rn between #{start} and #{end}
+		ORDER BY rn
+	</select>
+	
+	<select id="shMemberTotal" resultType="int">
+		Select count(*)
+		From member
+	</select>
+	
+	<select id="shMemberSearchList" parameterType="Member" resultType="Member">
+	<![CDATA[
+		Select a.*
+		From 
+			(Select rownum rn, mem_hiredate, mem_id, mem_name, mem_dept_md, mem_posi_md, mem_email, mem_leave, mem_rein, mem_resi
+			From member Where mem_id LIKE '%#{requirement}"%')
+		Where rn between #{start} and #{end}
+		ORDER BY rn
+	]]>
+	</select>
+	
+</mapper>
