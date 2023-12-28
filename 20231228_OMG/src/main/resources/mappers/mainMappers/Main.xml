@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oracle.OMG.MainMapper">
+	<select id="shMonthTotalSale" resultType="String">
+		Select SUM(qty*price) as monthTotal
+		From sales_detail
+		Where SUBSTR(sales_date,1,5) = TO_CHAR(sysdate, 'YY/MM')
+	</select>
+	
+	<select id="shMonthTotalPurchase" resultType="String">
+		Select SUM(qty*price) as monthTotal
+		From pur_detail
+		Where SUBSTR(pur_date,1,5) = TO_CHAR(sysdate, 'YY/MM') 
+	</select>
+</mapper>
