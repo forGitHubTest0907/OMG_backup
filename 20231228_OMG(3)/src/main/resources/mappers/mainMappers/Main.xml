@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oracle.OMG.MainMapper">
+	<select id="shMonthTotalSale" resultType="String">
+		Select SUM(qty*price) as monthTotal
+		From   sales_detail
+		Where  SUBSTR(sales_date,1,5) = TO_CHAR(sysdate, 'YY/MM')
+	</select>
+	
+	<select id="shMonthTotalPurchase" resultType="String">
+		Select SUM(qty*price) as monthTotal
+		From   pur_detail
+		Where  SUBSTR(pur_date,1,5) = TO_CHAR(sysdate, 'YY/MM') 
+	</select>
+	
+	<select id="shMainTeamList" parameterType="int" resultType="Member">
+		Select mem_img, mem_name, mem_posi_md, mem_duty_md
+		From   member
+		Where  mem_status != 2
+		and    mem_dept_md = (
+			Select mem_dept_md
+			From   member
+			Where  mem_id = #{mem_id}
+		)
+	</select>
+	
+	<select id="shMainMember" parameterType="int" resultType="Member">
+		Select mem_name, mem_id, mem_img, mem_hiredate, mem_dept_md, mem_posi_md, mem_duty_md, mem_sex
+		From   member
+		Where  mem_id = #{mem_id}
+	</select>
+</mapper>
